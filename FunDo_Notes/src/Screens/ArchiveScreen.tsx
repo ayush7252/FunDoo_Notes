@@ -17,8 +17,6 @@ const ArchiveScreen = () => {
   const [selectedNoteIds, setSelectedNoteIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // Create this index in Firestore: archived(ASC) + archivedAt(DESC)
   useEffect(() => {
     let unsubscribe: () => void;
     
@@ -90,12 +88,11 @@ const ArchiveScreen = () => {
 
       await batch.commit();
 
-      // Update state to remove unarchived notes from the list
       setArchivedNotes(prevNotes =>
         prevNotes.filter(note => !selectedNoteIds.includes(note.id))
       );
 
-      setSelectedNoteIds([]);  // Reset selected notes
+      setSelectedNoteIds([]);  
       Alert.alert('Success', `${selectedNoteIds.length} note(s) unarchived`);
     } catch (error) {
       console.error('Unarchive error:', error);
